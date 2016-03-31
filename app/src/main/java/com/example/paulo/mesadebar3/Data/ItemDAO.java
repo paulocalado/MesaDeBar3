@@ -34,7 +34,7 @@ public class ItemDAO {
         db.close(); // Closing database connection
     }
 
-    public void inserirItem_Pessoa(Item item,Pessoa pessoa){
+    public void inserirItemPessoa(Item item,Pessoa pessoa){
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DataBaseHandler.KEY_ID_ITEM, item.getIdItem());

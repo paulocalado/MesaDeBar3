@@ -3,6 +3,7 @@ package com.example.paulo.mesadebar3.Activitys;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.paulo.mesadebar3.AdapterListView;
+import com.example.paulo.mesadebar3.AdapterListViewDividirItem;
 import com.example.paulo.mesadebar3.AdapterListViewItem;
 import com.example.paulo.mesadebar3.Data.ItemDAO;
 import com.example.paulo.mesadebar3.Data.PessoaDAO;
@@ -46,8 +49,11 @@ public class ContaPessoaActivity extends AppCompatActivity {
     private ArrayList<Pessoa> pessoas,pessoas2;
     private AdapterListView adapterListViewP;
     private AdapterListViewItem adapterListView,adapterListView2;
+    private AdapterListViewDividirItem adapterListViewDividirItem;
     AlertDialog alerta;
+    Item objetoItem = new Item();
     ItemDAO dbItem = new ItemDAO(this);
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -71,6 +77,21 @@ public class ContaPessoaActivity extends AppCompatActivity {
         });
 
         listViewItens = (ListView)findViewById(R.id.listViewItens);
+
+        listViewItens.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+
+                dialogTriggerDividirItens();
+               // int codigo = adapterListView2.getItem(position).getIdItem();
+
+
+                // se tu pressionar ou clicar ele ta mostrando o toaster.
+               // Toast.makeText(getApplicationContext(), ""+codigo, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         listViewConta = (ListView)findViewById(R.id.listViewContaPessoa);
         listViewConta.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listViewConta.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
@@ -235,10 +256,13 @@ public class ContaPessoaActivity extends AppCompatActivity {
 
 
 
-        itens = dbItem.getTodosItensPorNome("Paulo");
+        itens = dbItem.getTodosItensPorNome("Joao");
         adapterListView = new AdapterListViewItem(this, itens);
         listViewConta.setAdapter(adapterListView);
         listViewConta.setCacheColorHint(Color.TRANSPARENT);
+
+
+
 
 
 
@@ -275,6 +299,33 @@ public class ContaPessoaActivity extends AppCompatActivity {
                 //dialog.dismiss();
                 // quando clicar no Ok, ele apenas fecha o dialog
                 createListView();
+            }
+        });
+
+        alerta = builder.create();
+
+        alerta.show();
+    }
+
+    private void dialogTriggerDividirItens(){
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater li = getLayoutInflater();
+        View view = li.inflate(R.layout.fragment_listview_dividir_itens, null);
+
+        final ListView listViewDividirItem = (ListView)view.findViewById(R.id.listViewDividirItens);
+        pessoas = db.getTodasPessoas();
+        adapterListViewDividirItem = new AdapterListViewDividirItem(this, pessoas);
+        listViewDividirItem.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listViewDividirItem.setAdapter(adapterListViewDividirItem);
+
+        builder.setView(view);
+
+        builder.setPositiveButton("Dividir com essas pessoas", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+
             }
         });
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.paulo.mesadebar3.Entitys.Item;
@@ -14,20 +15,20 @@ import com.example.paulo.mesadebar3.Entitys.Pessoa;
 import java.util.ArrayList;
 
 /**
- * Created by Paulo on 21/01/2016.
+ * Created by Paulo on 30/03/2016.
  */
-public class AdapterListViewItem extends BaseAdapter {
+public class AdapterListViewDividirItem extends BaseAdapter {
     private LayoutInflater mInflater;
-    private ArrayList<Item> itens;
+    private ArrayList<Pessoa> pessoas;
     private SparseBooleanArray mSelectedItemsIds;
     private Context context;
 
-    public AdapterListViewItem(Context context, ArrayList<Item> itens)
+    public AdapterListViewDividirItem(Context context, ArrayList<Pessoa> pessoas)
     {
         //Itens que preencherão o listview
         mSelectedItemsIds = new  SparseBooleanArray();
         this.context = context;
-        this.itens = itens;
+        this.pessoas = pessoas;
         //responsavel por pegar o Layout do item.
         mInflater = LayoutInflater.from(context);
     }
@@ -39,7 +40,7 @@ public class AdapterListViewItem extends BaseAdapter {
      */
     public int getCount()
     {
-        return itens.size();
+        return pessoas.size();
     }
 
     /**
@@ -48,9 +49,9 @@ public class AdapterListViewItem extends BaseAdapter {
      * @param position
      * @return
      */
-    public Item getItem(int position)
+    public Pessoa getItem(int position)
     {
-        return itens.get(position);
+        return pessoas.get(position);
     }
 
     /**
@@ -67,18 +68,17 @@ public class AdapterListViewItem extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent)
     {
         //Pega o item de acordo com a posção.
-        Item item = itens.get(position);
+        Pessoa pessoa = pessoas.get(position);
         //infla o layout para podermos preencher os dados
-        view = mInflater.inflate(R.layout.todos_itens, null);
+        view = mInflater.inflate(R.layout.fragment_dividir_item, null);
 
         //atravez do layout pego pelo LayoutInflater, pegamos cada id relacionado
         //ao item e definimos as informações.
 
-        ((TextView) view.findViewById(R.id.txtIdItem)).setText(""+item.getIdItem());
-        ((TextView) view.findViewById(R.id.txtNomeItem)).setText(item.getNomeItem());
-        ((TextView) view.findViewById(R.id.txtPrecoItem)).setText(""+item.getPreco());
-        ((TextView) view.findViewById(R.id.txtQuantidadeItem)).setText(""+item.getQuantidade());
 
+        //((TextView) view.findViewById(R.id.txtNomePessoaDividir)).setText(pessoa.getNome());
+         CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkDividirItem);
+        checkBox.setText(pessoa.getNome()+"                                                                                 0");
 
 
         return view;
@@ -96,7 +96,7 @@ public class AdapterListViewItem extends BaseAdapter {
 
 
     public void remove(String  object) {
-        itens.remove(object);
+        pessoas.remove(object);
         notifyDataSetChanged();
     }
 
@@ -112,5 +112,4 @@ public class AdapterListViewItem extends BaseAdapter {
     public void  toggleSelection(int position) {
         selectView(position, !mSelectedItemsIds.get(position));
     }
-
 }
