@@ -78,7 +78,7 @@ public class AdapterListViewDividirItem extends BaseAdapter {
 
         //((TextView) view.findViewById(R.id.txtNomePessoaDividir)).setText(pessoa.getNome());
          CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkDividirItem);
-        checkBox.setText(pessoa.getNome()+"                                                                                 0");
+        checkBox.setText(pessoa.getNome()+"                                                                                 ");
 
 
         return view;
@@ -91,6 +91,7 @@ public class AdapterListViewDividirItem extends BaseAdapter {
     }
 
     public  SparseBooleanArray getSelectedIds() {
+
         return mSelectedItemsIds;
     }
 

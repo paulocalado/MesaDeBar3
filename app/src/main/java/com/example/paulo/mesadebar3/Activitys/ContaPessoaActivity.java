@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -53,6 +54,7 @@ public class ContaPessoaActivity extends AppCompatActivity {
     AlertDialog alerta;
     Item objetoItem = new Item();
     ItemDAO dbItem = new ItemDAO(this);
+    String nomeItemDividir;
 
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -81,6 +83,8 @@ public class ContaPessoaActivity extends AppCompatActivity {
         listViewItens.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+
+                nomeItemDividir = adapterListView2.getItem(position).getNomeItem();
 
                 dialogTriggerDividirItens();
                // int codigo = adapterListView2.getItem(position).getIdItem();
@@ -314,17 +318,66 @@ public class ContaPessoaActivity extends AppCompatActivity {
         LayoutInflater li = getLayoutInflater();
         View view = li.inflate(R.layout.fragment_listview_dividir_itens, null);
 
+
+
         final ListView listViewDividirItem = (ListView)view.findViewById(R.id.listViewDividirItens);
         pessoas = db.getTodasPessoas();
+
+        ArrayList<String> nomePessoas = new ArrayList<String>();
+
+        for(int i=0; i<pessoas.size();i++){
+
+            Pessoa pessoa = pessoas.get(i);
+            nomePessoas.add(pessoa.getNome());
+        }
+
+       ArrayAdapter<String> adapter
+
+                = new ArrayAdapter<String>(ContaPessoaActivity.this,
+
+                android.R.layout.simple_list_item_multiple_choice,
+
+                nomePessoas);
+
+
         adapterListViewDividirItem = new AdapterListViewDividirItem(this, pessoas);
         listViewDividirItem.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listViewDividirItem.setAdapter(adapterListViewDividirItem);
+        listViewDividirItem.setAdapter(adapter);
+        ((TextView)view.findViewById(R.id.txtNomeItemDividir)).setText("Com quem Você vai dividir o(a) "+nomeItemDividir+"?");
+
+        
 
         builder.setView(view);
 
         builder.setPositiveButton("Dividir com essas pessoas", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                String selected = "";
 
+
+
+                int cntChoice = listViewDividirItem.getCount();
+
+                SparseBooleanArray sparseBooleanArray = listViewDividirItem.getCheckedItemPositions();
+
+                for(int i = 0; i < cntChoice; i++){
+
+                    if(sparseBooleanArray.get(i)) {
+
+                        selected += listViewDividirItem.getItemAtPosition(i).toString() + "\n";
+
+
+
+                    }
+
+                }
+
+
+
+                Toast.makeText(ContaPessoaActivity.this,
+
+                        selected,
+
+                        Toast.LENGTH_LONG).show();
 
             }
         });
